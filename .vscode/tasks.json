@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/GPS.RandomDataGenerator/GPS.RandomDataGenerator.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "pack",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "pack",
+                "${workspaceFolder}/src/GPS.RandomDataGeneration.sln",
+                "/property:GenerateFullPaths=true",
+                "/property:Configuration=Release"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "test",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/src/GPS.RandomDataGeneration.sln",
+                "/property:GenerateFullPaths=true",
+                "/property:Configuration=Debug",
+                "--runtime", 
+                "x64"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}
