@@ -16,9 +16,9 @@ jobs:
       with:
         dotnet-version: 3.1.100
     - name: Test with dotnet
-      run: dotnet test --configuration Debug
+      run: dotnet test src\GPS.RandomDataGeneration.sln --configuration Debug
     - name: Pack with dotnet
-      run: dotnet pack --configuration Release -restore:True
+      run: dotnet pack src\GPS.RandomDataGeneration.sln --configuration Release -restore:True
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
