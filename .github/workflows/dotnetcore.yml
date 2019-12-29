@@ -50,25 +50,23 @@ jobs:
             Set-Location src
             gitversion /l console /output buildserver /updateAssemblyInfo /exec 
 
-    - name: Build Abstractions
+    - name: Build & Pack Abstractions
       run: |
             Set-Location src
             dotnet build GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj --configuration Release --disable-parallel
+            dotnet pack GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj --configuration Release --no-build --no-restore
 
-    - name: Build Data
+    - name: Build & Pack Data
       run: |
             Set-Location src
             dotnet build GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj --configuration Release --disable-parallel
+            dotnet pack GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj --configuration Release --no-build --no-restore
 
-    - name: Build Library
+    - name: Build & Pack Library
       run: |
             Set-Location src
             dotnet build GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj --configuration Release --disable-parallel
-
-    - name: Build Packages
-      run: |
-            Set-Location src
-            dotnet pack GPS.RandomDataGeneration.sln --configuration Release --no-build --no-restore
+            dotnet pack GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj --configuration Release --no-build --no-restore
 
       # Publish the packages
     - name: Publish to GitHub Repository
