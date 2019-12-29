@@ -46,11 +46,29 @@ jobs:
     - name: Setup GitVersion
       run: choco install gitversion.portable -pre -y
 
-    - name: Pack with dotnet
+    - name: Execute GitVersion
       run: |
             Set-Location src
             gitversion /l console /output buildserver /updateAssemblyInfo /exec 
-            dotnet build GPS.RandomDataGeneration.sln --configuration Release --disable-parallel
+
+    - name: Build Abstractions
+      run: |
+            Set-Location src
+            dotnet build GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj --configuration Release --disable-parallel
+
+    - name: Build Data
+      run: |
+            Set-Location src
+            dotnet build GPS.RandomDataGenerator.Data\GPS.RandomDataGenerator.Data.csproj --configuration Release --disable-parallel
+
+    - name: Build Library
+      run: |
+            Set-Location src
+            dotnet build GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj --configuration Release --disable-parallel
+
+    - name: Build Packages
+      run: |
+            Set-Location src
             dotnet pack GPS.RandomDataGeneration.sln --configuration Release --no-build
 
       # Publish the packages
