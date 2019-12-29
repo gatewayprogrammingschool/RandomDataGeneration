@@ -64,7 +64,6 @@ jobs:
       # Publish the packages
       # curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
     - name: Publish to GitHub Repository
-      shell: bash
       run: |
             dotnet nuget push packages/*.nupkg -k ${{ secrets.GitHubRepositoryToken }} -s https://nuget.pkg.github.com/gatewayprogrammingschool/ --skip-duplicate -n:True
             dotnet nuget push packages/*.nupkg -k ${{ secrets.NugetRepositoryToken }} -s https://api.nuget.org/v3/index.json -SkipDuplicate
