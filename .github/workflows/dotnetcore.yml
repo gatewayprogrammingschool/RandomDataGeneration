@@ -7,7 +7,7 @@ on:
       
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v1
@@ -25,17 +25,39 @@ jobs:
       run: dotnet build src\GPS.RandomDataGeneration.sln --configuration Debug
 
   test:
+    needs: [build]
     runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v1
+      with:
+        repo-token: ${{ secrets.GitHubRepositoryToken }}
+
+      # Prepare Container
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+
       # Perform Testing
     - name: Test with dotnet
       run: dotnet test src\GPS.RandomDataGeneration.sln --configuration Debug
 
   publish:
+    needs: [test]
     runs-on: windows-latest
 
     steps:
+    - uses: actions/checkout@v1
+      with:
+        repo-token: ${{ secrets.GitHubRepositoryToken }}
+
+      # Prepare Container
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+
     - name: Install NuGet client
       uses: warrenbuckley/Setup-Nuget@v1    
 
