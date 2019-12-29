@@ -59,7 +59,7 @@ jobs:
     - name: Build Data
       run: |
             Set-Location src
-            dotnet build GPS.RandomDataGenerator.Data\GPS.RandomDataGenerator.Data.csproj --configuration Release --disable-parallel
+            dotnet build GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj --configuration Release --disable-parallel
 
     - name: Build Library
       run: |
