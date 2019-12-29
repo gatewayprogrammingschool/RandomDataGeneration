@@ -1,9 +1,8 @@
 name: .NET Core
 
 on: 
-  pull_request: 
-    tags:
-    - deploy
+  release: 
+    types: [published, created, edited]
       
 jobs:
   build:
