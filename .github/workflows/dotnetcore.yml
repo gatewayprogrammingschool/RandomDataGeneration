@@ -37,7 +37,7 @@ jobs:
       run: |
             for f in packages/*.nupkg
             do 
-              echo 'Token:' ${{ secret.GitHubRepositoryToken }}
+              echo 'Token:' ${{ secrets.GitHubRepositoryToken }}
                 curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
             done
 
