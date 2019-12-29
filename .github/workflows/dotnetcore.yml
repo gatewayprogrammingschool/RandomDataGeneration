@@ -41,7 +41,7 @@ jobs:
 
       # Perform Testing
     - name: Test with dotnet
-      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug --disable-parallel
+      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug --disable-parallel --no-build
 
   publish:
     needs: [test]
@@ -65,7 +65,8 @@ jobs:
       run: |
             Set-Location src
             gitversion /l console /output buildserver /updateAssemblyInfo /exec 
-            dotnet pack GPS.RandomDataGeneration.sln --configuration Release -restore:True --disable-parallel
+            dotnet build GPS.RandomDataGeneration.sln --configuration Release --disable-parallel
+            dotnet pack GPS.RandomDataGeneration.sln --configuration Release --no-build
 
       # Publish the packages
     - name: Publish to GitHub Repository
