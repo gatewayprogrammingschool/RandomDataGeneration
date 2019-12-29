@@ -19,7 +19,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
-        
+
     - name: Install NuGet client
       uses: warrenbuckley/Setup-Nuget@v1    
 
@@ -37,7 +37,7 @@ jobs:
 
       # Publish the packages
     - name: Publish to GitHub Repository
-      run: dotnet nuget push 'packages/**' -s "GPR"
+      run: dotnet nuget push 'packages/*.nupkg/ -Source "GPR" -SkipDuplicate -k ${{ secrets.GITHUB_TOKEN }}
 
       # Hold onto artifacts from the build.
     - name: Upload artifact
