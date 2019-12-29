@@ -69,7 +69,7 @@ jobs:
     - name: Build Packages
       run: |
             Set-Location src
-            dotnet pack GPS.RandomDataGeneration.sln --configuration Release --no-build
+            dotnet pack GPS.RandomDataGeneration.sln --configuration Release --no-build --no-restore
 
       # Publish the packages
     - name: Publish to GitHub Repository
