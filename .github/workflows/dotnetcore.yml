@@ -64,7 +64,7 @@ jobs:
     - name: Pack with dotnet
       run: |
             Set-Location src
-            gitversion /l console /output buildserver /updateAssemblyInfo
+            gitversion /l console /output buildserver /updateAssemblyInfo /exec 
             dotnet pack GPS.RandomDataGeneration.sln --configuration Release -restore:True
 
       # Publish the packages
