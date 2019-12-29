@@ -67,14 +67,12 @@ jobs:
       shell: powershell
       run: |
             $ghSource = "https://nuget.pkg.github.com/gatewayprogrammingschool/"            
-            $ghToken = ${{ secrets.GitHubRepositoryToken }}
             $ngSource = "https://api.nuget.org/v3/index.json"
-            $ngToken = ${{ secrets.NugetRepositoryToken }}
-            
+
             Get-ChildItem packages/*.nupkg | ForEach-Object -Process {
               Write-Host "Processing" $_.FullName
-              dotnet nuget push $_.FullName --api-key $ghToken --source $ghSource --skip-duplicate
-              dotnet nuget push $_.FullName --api-key $ngToken --source $ngSource --skip-duplicate
+              dotnet nuget push $_.FullName --api-key ${{ secrets.GitHubRepositoryToken }} --source $ghSource --skip-duplicate
+              dotnet nuget push $_.FullName --api-key ${{ secrets.NugetRepositoryToken }} --source $ngSource --skip-duplicate
             }
 
       # Hold onto artifacts from the build.
