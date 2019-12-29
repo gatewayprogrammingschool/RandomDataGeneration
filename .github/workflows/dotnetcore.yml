@@ -12,7 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       with:
-        repo-token: ${{ secrets.GitHubToken }}
+        repo-token: ${{ secrets.GitHubRepositoryToken }}
 
       # Prepare Container
     - name: Setup .NET Core
@@ -37,7 +37,8 @@ jobs:
       run: |
             for f in packages/*.nupkg
             do 
-                curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
+              echo 'Token:' ${{ secret.GitHubRepositoryToken }}
+                curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
             done
 
       # Hold onto artifacts from the build.
