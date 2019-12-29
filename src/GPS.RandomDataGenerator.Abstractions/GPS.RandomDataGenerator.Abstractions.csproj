@@ -29,6 +29,7 @@
     <IncludeSource>True</IncludeSource>
     <IncludeBuildOutput>True</IncludeBuildOutput>
     <IncludeContentInPack>True</IncludeContentInPack>
+    <RepositoryUrl>https://github.com/gatewayprogrammingschool/RandomDataGeneration</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyCompanyAttribute>Gateway Programming School, Inc.</AssemblyCompanyAttribute>

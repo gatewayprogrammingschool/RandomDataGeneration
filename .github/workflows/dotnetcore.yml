@@ -7,22 +7,77 @@ on:
       
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: [self-hosted, windows]
 
     steps:
     - uses: actions/checkout@v1
+      with:
+        repo-token: ${{ secrets.GitHubRepositoryToken }}
+
+      # Prepare Container
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
+
+      # Perform Build
+    - name: Build with dotnet
+      run: dotnet build src/GPS.RandomDataGeneration.sln --configuration Debug
+
+  test:
+    needs: [build]
+    runs-on: [self-hosted, windows]
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        repo-token: ${{ secrets.GitHubRepositoryToken }}
+
+      # Prepare Container
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+
+      # Perform Testing
     - name: Test with dotnet
-      run: dotnet test src\GPS.RandomDataGeneration.sln --configuration Debug
+      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug
+
+  publish:
+    needs: [test]
+    runs-on: [self-hosted, windows]
+
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        repo-token: ${{ secrets.GitHubRepositoryToken }}
+
+      # Prepare Container
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.100
+
     - name: Pack with dotnet
-      run: dotnet pack src\GPS.RandomDataGeneration.sln --configuration Release -restore:True
+      run: dotnet pack src/GPS.RandomDataGeneration.sln --configuration Release -restore:True
+
+      # Publish the packages
+      # curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
+    - name: Publish to GitHub Repository
+      shell: powershell
+      run: |
+            $ghSource = "https://nuget.pkg.github.com/gatewayprogrammingschool/"            
+            $ngSource = "https://api.nuget.org/v3/index.json"
+
+            Get-ChildItem packages/*.nupkg | ForEach-Object -Process {
+              Write-Host "Processing" $_.FullName
+              dotnet nuget push $_.FullName --api-key ${{ secrets.GitHubRepositoryToken }} --source $ghSource --skip-duplicate
+              dotnet nuget push $_.FullName --api-key ${{ secrets.NugetRepositoryToken }} --source $ngSource --skip-duplicate
+            }
+
+      # Hold onto artifacts from the build.
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        # Artifact name
-        name: GPS.RandomDataGenerator.*.nupkg
-        # Directory containing files to upload
+        name: GPS.RandomDataGenerator
         path: packages
