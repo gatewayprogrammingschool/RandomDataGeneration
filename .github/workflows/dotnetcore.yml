@@ -35,7 +35,7 @@ jobs:
     - name: Publish to GitHub Repository
       shell: bash
       run: |
-            for f in ./RandomDataGeneration/packages/*.nupkg
+            for f in packages/*.nupkg
             do 
                 curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
             done
