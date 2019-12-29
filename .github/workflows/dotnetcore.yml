@@ -24,27 +24,12 @@ jobs:
     - name: Build with dotnet
       run: dotnet build src/GPS.RandomDataGeneration.sln --configuration Debug --disable-parallel
 
-  test:
-    needs: [build]
-    runs-on: [self-hosted, windows]
-
-    steps:
-    - uses: actions/checkout@v1
-      with:
-        repo-token: ${{ secrets.GitHubRepositoryToken }}
-
-      # Prepare Container
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.100
-
       # Perform Testing
     - name: Test with dotnet
-      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug --disable-parallel --no-build
+      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug --no-build
 
   publish:
-    needs: [test]
+    needs: [build]
     runs-on: [self-hosted, windows]
 
     steps:
