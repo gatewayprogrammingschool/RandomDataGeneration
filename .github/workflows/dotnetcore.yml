@@ -31,13 +31,14 @@ jobs:
     - name: Pack with dotnet
       run: dotnet pack src\GPS.RandomDataGeneration.sln --configuration Release -restore:True
 
-      # Prepare GPR Source
-    - name: Add private GitHub registry to NuGet
-      run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/gatewayprogrammingschool/index.json -Username sharpninja -Password ${{ secrets.GITHUB_TOKEN }}
-
       # Publish the packages
     - name: Publish to GitHub Repository
-      run: dotnet nuget push 'packages/*.nupkg/ -Source "GPR" -SkipDuplicate -k ${{ secrets.GITHUB_TOKEN }}
+      shell: bash
+      run: |
+            for f in ./RandomDataGeneration/packages/*.nupkg
+            do 
+                curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
+            done
 
       # Hold onto artifacts from the build.
     - name: Upload artifact
