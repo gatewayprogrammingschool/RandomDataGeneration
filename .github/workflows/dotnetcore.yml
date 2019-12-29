@@ -37,8 +37,8 @@ jobs:
       run: |
             for f in packages/*.nupkg
             do 
-              echo 'Token:' ${{ secrets.GitHubRepositoryToken }}
                 curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
+                nuget push $f -ApiKey ${{ secrets.NugetRepositoryToken }} -Source https://api.nuget.org/v3/index.json
             done
 
       # Hold onto artifacts from the build.
