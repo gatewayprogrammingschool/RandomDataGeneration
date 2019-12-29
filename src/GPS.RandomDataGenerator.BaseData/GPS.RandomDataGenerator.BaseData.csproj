@@ -44,9 +44,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj" />
-    <!-- <PackageReference Include="GitVersionTask" Version="5.1.3">
+    <PackageReference Include="GitVersionTask" Version="5.1.3">
       <PrivateAssets>All</PrivateAssets>
-    </PackageReference> -->
+    </PackageReference>
   </ItemGroup>
 
 </Project>
