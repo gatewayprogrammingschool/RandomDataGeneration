@@ -2,7 +2,7 @@ name: .NET Core
 
 on: 
   release: 
-    types: [published, created, edited]
+    types: [created, edited]
       
 jobs:
   build:
