@@ -33,6 +33,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyCompanyAttribute>Gateway Programming School, Inc.</AssemblyCompanyAttribute>
+    <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
+    <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+    <WriteVersionInfoToBuildLog>true</WriteVersionInfoToBuildLog>
+    <UpdateVersionProperties>true</UpdateVersionProperties>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\RELEASE_NOTES.md" Pack="True" PackagePath="$(PackageReleaseNotes)" />
@@ -41,6 +45,9 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.0" />
+    <PackageReference Include="GitVersionTask" Version="5.1.3">
+      <PrivateAssets>All</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

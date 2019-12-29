@@ -58,8 +58,14 @@ jobs:
       with:
         dotnet-version: 3.1.100
 
+    - name: Setup GitVersion
+      run: choco install gitversion.portable -pre -y
+
     - name: Pack with dotnet
-      run: dotnet pack src/GPS.RandomDataGeneration.sln --configuration Release -restore:True
+      run: |
+            Set-Location src
+            gitversion /l console /output buildserver /updateAssemblyInfo
+            dotnet pack GPS.RandomDataGeneration.sln --configuration Release -restore:True --version "%GitVersion_NuGetVersion%"
 
       # Publish the packages
     - name: Publish to GitHub Repository
