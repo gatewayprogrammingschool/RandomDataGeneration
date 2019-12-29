@@ -20,25 +20,37 @@ jobs:
       with:
         dotnet-version: 3.1.100
 
-    - name: Install NuGet client
-      uses: warrenbuckley/Setup-Nuget@v1    
+      # Perform Build
+    - name: Build with dotnet
+      run: dotnet build src\GPS.RandomDataGeneration.sln --configuration Debug
 
+  test:
+    runs-on: windows-latest
+
+    steps:
       # Perform Testing
     - name: Test with dotnet
       run: dotnet test src\GPS.RandomDataGeneration.sln --configuration Debug
 
-      # Pack
+  publish:
+    runs-on: windows-latest
+
+    steps:
+    - name: Install NuGet client
+      uses: warrenbuckley/Setup-Nuget@v1    
+
     - name: Pack with dotnet
       run: dotnet pack src\GPS.RandomDataGeneration.sln --configuration Release -restore:True
 
       # Publish the packages
+      # curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
     - name: Publish to GitHub Repository
       shell: bash
       run: |
             for f in packages/*.nupkg
             do 
-                curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
-                nuget push $f -ApiKey ${{ secrets.NugetRepositoryToken }} -Source https://api.nuget.org/v3/index.json
+                nuget push $f -ApiKey gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }} -Source https://nuget.pkg.github.com/gatewayprogrammingschool/ -SkipDuplicate
+                nuget push $f -ApiKey ${{ secrets.NugetRepositoryToken }} -Source https://api.nuget.org/v3/index.json -SkipDuplicate
             done
 
       # Hold onto artifacts from the build.
