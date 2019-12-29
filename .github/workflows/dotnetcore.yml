@@ -66,11 +66,8 @@ jobs:
     - name: Publish to GitHub Repository
       shell: bash
       run: |
-            for f in packages/*.nupkg
-            do 
-                dotnet nuget push $f -ApiKey gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }} -Source https://nuget.pkg.github.com/gatewayprogrammingschool/ -SkipDuplicate
-                dotnet nuget push $f -ApiKey ${{ secrets.NugetRepositoryToken }} -Source https://api.nuget.org/v3/index.json -SkipDuplicate
-            done
+            dotnet nuget push packages/*.nupkg -k gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }} -s https://nuget.pkg.github.com/gatewayprogrammingschool/ --skip-duplicate -n
+            dotnet nuget push packages/*.nupkg -k ${{ secrets.NugetRepositoryToken }} -s https://api.nuget.org/v3/index.json -SkipDuplicate
 
       # Hold onto artifacts from the build.
     - name: Upload artifact
