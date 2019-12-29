@@ -18,6 +18,10 @@
 			"**/.vscode/tasks.json": true,
 			"**/.vs": true
 		},
-		"explorerExclude.backup": null
+		"explorerExclude.backup": null,
+		"NugetGallery.sources":[
+			"{\"name\": \"nuget.org\",\"url\": \"https://api-v2v3search-0.nuget.org\"}"
+			"{\"name\": \"GitHub\",\"url\": \"https://nuget.pkg.github.com/gatwayprogrammingschool\"}"
+		]
 	}
 }
