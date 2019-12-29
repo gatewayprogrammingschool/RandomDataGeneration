@@ -65,7 +65,7 @@ jobs:
       run: |
             Set-Location src
             gitversion /l console /output buildserver /updateAssemblyInfo
-            dotnet pack GPS.RandomDataGeneration.sln --configuration Release -restore:True --version "%GitVersion_NuGetVersion%"
+            dotnet pack GPS.RandomDataGeneration.sln --configuration Release -restore:True
 
       # Publish the packages
     - name: Publish to GitHub Repository
