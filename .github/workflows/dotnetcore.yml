@@ -13,22 +13,35 @@ jobs:
     - uses: actions/checkout@v1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Prepare Container
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.100
+        
+    - name: Install NuGet client
+      uses: warrenbuckley/Setup-Nuget@v1    
+
+      # Perform Testing
     - name: Test with dotnet
       run: dotnet test src\GPS.RandomDataGeneration.sln --configuration Debug
+
+      # Pack
     - name: Pack with dotnet
       run: dotnet pack src\GPS.RandomDataGeneration.sln --configuration Release -restore:True
+
+      # Prepare GPR Source
     - name: Add private GitHub registry to NuGet
       run: nuget sources add -name "GPR" -Source https://nuget.pkg.github.com/gatewayprogrammingschool/index.json -Username sharpninja -Password ${{ secrets.GITHUB_TOKEN }}
+
+      # Publish the packages
     - name: Publish to GitHub Repository
       run: dotnet nuget push 'packages/**' -s "GPR"
+
+      # Hold onto artifacts from the build.
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        # Artifact name
         name: GPS.RandomDataGenerator
-        # Directory containing files to upload
         path: packages
