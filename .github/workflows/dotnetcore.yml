@@ -22,7 +22,7 @@ jobs:
 
       # Perform Build
     - name: Build with dotnet
-      run: dotnet build src\GPS.RandomDataGeneration.sln --configuration Debug
+      run: dotnet build src/GPS.RandomDataGeneration.sln --configuration Debug
 
   test:
     needs: [build]
@@ -41,7 +41,7 @@ jobs:
 
       # Perform Testing
     - name: Test with dotnet
-      run: dotnet test src\GPS.RandomDataGeneration.sln --configuration Debug
+      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug
 
   publish:
     needs: [test]
@@ -62,7 +62,7 @@ jobs:
       uses: warrenbuckley/Setup-Nuget@v1    
 
     - name: Pack with dotnet
-      run: dotnet pack src\GPS.RandomDataGeneration.sln --configuration Release -restore:True
+      run: dotnet pack src/GPS.RandomDataGeneration.sln --configuration Release -restore:True
 
       # Publish the packages
       # curl -vX PUT -u "gatewayprogrammingschool:${{ secrets.GitHubRepositoryToken }}" -F package=@$f https://nuget.pkg.github.com/gatewayprogrammingschool/
