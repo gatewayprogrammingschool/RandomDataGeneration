@@ -21,6 +21,12 @@ namespace GPS.RandomDataGenerator
                                         new NameGenerator(provider, ReadSurNames(), ReadGivenNames()));
 
             collection.AddTransient(provider =>
+                                        new SurNameGenerator(provider, ReadSurNames()));
+
+            collection.AddTransient(provider =>
+                                        new GivenNameGenerator(provider, ReadGivenNames()));
+
+            collection.AddTransient(provider =>
                                         new EmailGenerator(provider, ReadDomains()));
 
             collection.AddTransient(provider =>

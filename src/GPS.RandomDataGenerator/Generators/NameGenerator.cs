@@ -7,9 +7,10 @@ using GPS.RandomDataGenerator.Abstractions;
 
 namespace GPS.RandomDataGenerator.Generators
 {
-    public class NameGenerator : IDataGenerator<string>
+    public class NameGenerator : IDataGenerator<string>, IResetable
     {
-        private Dictionary<int, Random> Randomizers { get; } = new Dictionary<int, Random>();
+        private Dictionary<int, Random> SurNameRandomizers { get; } = new Dictionary<int, Random>();
+        private Dictionary<int, Random> GivenNameRandomizers { get; } = new Dictionary<int, Random>();
 
         public NameGenerator(IServiceProvider provider
             , IEnumerable<string> surnames
@@ -24,18 +25,46 @@ namespace GPS.RandomDataGenerator.Generators
         private string[]         SurNames   { get; }
         private string[]         GivenNames { get; }
 
+        public IEnumerable<string> Generate(Random random, int count)
+        {
+            var seed = random.GetHashCode();
+
+            if(!SurNameRandomizers.ContainsKey(seed)) SurNameRandomizers.Add(seed, random);
+            if(!GivenNameRandomizers.ContainsKey(seed)) GivenNameRandomizers.Add(seed, random);
+
+            for (var i = 0; i < count; ++i) 
+            {
+                yield return
+                    $"{GivenNames[random.Next(0, GivenNames.Length - 1)]} {SurNames[random.Next(0, SurNames.Length - 1)]}";
+            }
+        }
+
         public IEnumerable<string> Generate(int? seed, int count, params object[] options)
         {
             seed ??= DateTime.Now.Millisecond;
-            if (!Randomizers.TryGetValue(seed.Value, out var random))
+            if (!SurNameRandomizers.TryGetValue(seed.Value, out var surNameRandom))
             {
-                random = new Random(seed.Value);
-                Randomizers.Add(seed.Value, random);
+                surNameRandom = new Random(seed.Value);
+                SurNameRandomizers.Add(seed.Value, surNameRandom);
             }
 
-            for (var i = 0; i < count; ++i)
+            if (!GivenNameRandomizers.TryGetValue(seed.Value, out var givenNameRandom))
+            {
+                givenNameRandom = new Random(seed.Value);
+                GivenNameRandomizers.Add(seed.Value, givenNameRandom);
+            }
+
+            for (var i = 0; i < count; ++i) 
+            {
                 yield return
-                    $"{GivenNames[random.Next(0, GivenNames.Length - 1)]} {SurNames[random.Next(0, SurNames.Length - 1)]}";
+                    $"{GivenNames[givenNameRandom.Next(0, GivenNames.Length - 1)]} {SurNames[surNameRandom.Next(0, SurNames.Length - 1)]}";
+            }
+        }
+ 
+        public void Reset(int seed)
+        {
+            if(SurNameRandomizers.ContainsKey(seed)) SurNameRandomizers.Remove(seed);
+            if(GivenNameRandomizers.ContainsKey(seed)) GivenNameRandomizers.Remove(seed);
         }
     }
 }

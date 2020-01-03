@@ -4,9 +4,23 @@ using GPS.RandomDataGenerator.Abstractions;
 
 namespace GPS.RandomDataGenerator.Generators
 {
-    public class DateGenerator : IDataGenerator<DateTime>
+    public class DateGenerator : IDataGenerator<DateTime>, IResetable
     {
-        private readonly Dictionary<int, Random> _randomizers = new Dictionary<int, Random>();
+        private Dictionary<int, Random> Randomizers { get; } = new Dictionary<int, Random>();
+
+        public IEnumerable<DateTime> Generate(Random random, int count, DateTime min, DateTime max)
+        {
+            if (!Randomizers.ContainsKey(random.GetHashCode()))
+            {
+                Randomizers.Add(random.GetHashCode(), random);
+            }
+            else
+            {
+                Randomizers[random.GetHashCode()] = random;
+            }
+
+            return Generate(random.GetHashCode(), count, min, max);
+        }
 
         public IEnumerable<DateTime> Generate(int? seed, int count, params object[] options)
         {
@@ -27,10 +41,10 @@ namespace GPS.RandomDataGenerator.Generators
             }
 
             seed ??= DateTime.Now.Millisecond;
-            if (!_randomizers.TryGetValue(seed.Value, out var random))
+            if (!Randomizers.TryGetValue(seed.Value, out var random))
             {
                 random = new Random(seed.Value);
-                _randomizers.Add(seed.Value, random);
+                Randomizers.Add(seed.Value, random);
             }
 
             for (var i = 0; i < count; ++i)
@@ -53,5 +67,9 @@ namespace GPS.RandomDataGenerator.Generators
                 yield return value;
             }
         }
-    }
+ 
+        public void Reset(int seed)
+        {
+            if(Randomizers.ContainsKey(seed)) Randomizers.Remove(seed);
+        }   }
 }

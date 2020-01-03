@@ -10,11 +10,11 @@ using System.Collections.Generic;
 
 namespace GPS.RandomDataGenerator.Tests
 {
-    public class NameTests
+    public class GivenNameTests
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public NameTests(ITestOutputHelper testOutputHelper)
+        public GivenNameTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
             var service = new ServiceCollection();
@@ -28,9 +28,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0xA)]
         //[InlineData(0x64)]
         //[InlineData(0x3E8)]
-        public void GenerateNames(int count)
+        public void GenerateGivenNames(int count)
         {
-            var names = Provider.GetService<NameGenerator>()?
+            var names = Provider.GetService<GivenNameGenerator>()?
                 .Generate(0x0, count)?
                 .ToList();
 
@@ -50,11 +50,11 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0xA)]
         //[InlineData(0x64)]
         //[InlineData(0x3E8)]
-        public void GenerateNamesFromRandom(int count)
+        public void GenerateGivenNamesFromRandom(int count)
         {
             var random = new Random(0x0);
 
-            var names = random.Generate(Provider, count, GenerateStrings.FullName).ToList();
+            var names = random.Generate(Provider, count, GenerateStrings.GivenName).ToList();
 
             Assert.NotNull(names);
             Assert.NotEmpty(names);
@@ -66,13 +66,13 @@ namespace GPS.RandomDataGenerator.Tests
             names.ForEach(name => _testOutputHelper.WriteLine(name));
             _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
             #endif
-        }    
+        }
 
         [Theory]
         [InlineData(0xA)]
         //[InlineData(0x64)]
         //[InlineData(0x3E8)]
-        public void GenerateNamesNext(int count)
+        public void GenerateGivenNamesNext(int count)
         {
             var random = new Random(0x0);
 
@@ -80,7 +80,7 @@ namespace GPS.RandomDataGenerator.Tests
 
             for(var i = 0; i < count; ++i)
             {
-                var name = random.Next(Provider, GenerateStrings.FullName);
+                var name = random.Next(Provider, GenerateStrings.GivenName);
 
                 names.Add(name);
             }
@@ -95,6 +95,6 @@ namespace GPS.RandomDataGenerator.Tests
             names.ForEach(name => _testOutputHelper.WriteLine(name));
             _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
             #endif
-        }    
+        }
     }
 }

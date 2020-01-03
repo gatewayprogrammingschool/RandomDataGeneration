@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using GPS.RandomDataGenerator.Extensions;
+using GPS.RandomDataGenerator.Options;
 using System.Linq;
 using GPS.RandomDataGenerator.Generators;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,6 +48,53 @@ namespace GPS.RandomDataGenerator.Tests
         }
 
         [Theory]
+        [InlineData(0x0, 0xA, 0x0, 0x19)]
+        [InlineData(0x1, 0xA, 0x0, 0x19)]
+        [InlineData(0x0, 0x64, -0x3E8, 0x3E8)]
+        [InlineData(0x0, 0x2710, int.MinValue, int.MaxValue)]
+        public void GenerateIntegersFromRandom(int seed, int count, int min, int max)
+        {
+            var random = new Random(seed);
+
+            var ints = random.Generate(count, min, max).ToList();
+
+            Assert.NotNull(ints);
+            Assert.NotEmpty(ints);
+            Assert.Equal(count, ints.Count);
+            Assert.True(Math.Max(max, ints.Max()) == max);
+            Assert.True(Math.Min(min, ints.Min()) == min);
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            ints.ForEach(i => _testOutputHelper.WriteLine($"{i}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+        
+        [Theory]
+        [InlineData(0x0, 0xA, 0x0, 0x19)]
+        [InlineData(0x1, 0xA, 0x0, 0x19)]
+        [InlineData(0x0, 0x64, -0x3E8, 0x3E8)]
+        [InlineData(0x0, 0x2710, int.MinValue, int.MaxValue)]
+        public void GenerateIntegersFromOptions(int seed, int count, int min, int max)
+        {
+            var options = new RangeOptions<int, int>(count, min, max);
+            var random = new Random(seed);
+
+            var ints = random.Generate(options).ToList();
+
+            Assert.NotNull(ints);
+            Assert.NotEmpty(ints);
+            Assert.Equal(options.Count, ints.Count);
+            Assert.True(Math.Max(options.Max, ints.Max()) == options.Max);
+            Assert.True(Math.Min(options.Min, ints.Min()) == options.Min);
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {options.Count} ----------------------------");
+            ints.ForEach(i => _testOutputHelper.WriteLine($"{i}"));
+            _testOutputHelper.WriteLine($"End Count: {options.Count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
         [InlineData(0x0, 0xA, 0x0, 0x1)]
         [InlineData(0x1, 0xA, 0x0, 0x1)]
         [InlineData(0x0, 0x64, -1000.0, 1000.0)]
@@ -55,6 +104,53 @@ namespace GPS.RandomDataGenerator.Tests
             var doubles = Provider.GetService<DoubleGenerator>()?
                 .Generate(seed, count, min, max)?
                 .ToList();
+
+            Assert.NotNull(doubles);
+            Assert.NotEmpty(doubles);
+            Assert.Equal(count, doubles.Count);
+            Assert.Equal(max, Math.Max(max, doubles.Max()));
+            Assert.Equal(min, Math.Min(min, doubles.Min()));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            doubles.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
+        [InlineData(0x0, 0xA, 0x0, 0x1)]
+        [InlineData(0x1, 0xA, 0x0, 0x1)]
+        [InlineData(0x0, 0x64, -1000.0, 1000.0)]
+        [InlineData(0x0, 0x2710, double.MinValue, double.MaxValue)]
+        public void GenerateDoublesFromRandom(int seed, int count, double min, double max)
+        {
+            var random = new Random(seed);
+
+            var doubles = random.Generate(count, min, max).ToList();
+
+            Assert.NotNull(doubles);
+            Assert.NotEmpty(doubles);
+            Assert.Equal(count, doubles.Count);
+            Assert.Equal(max, Math.Max(max, doubles.Max()));
+            Assert.Equal(min, Math.Min(min, doubles.Min()));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            doubles.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
+        [InlineData(0x0, 0xA, 0x0, 0x1)]
+        [InlineData(0x1, 0xA, 0x0, 0x1)]
+        [InlineData(0x0, 0x64, -1000.0, 1000.0)]
+        [InlineData(0x0, 0x2710, double.MinValue, double.MaxValue)]
+        public void GenerateDoublesFromOptions(int seed, int count, double min, double max)
+        {
+            var options = new RangeOptions<double, double>(count, min, max);
+            var random = new Random(seed);
+
+            var doubles = random.Generate(options).ToList();
 
             Assert.NotNull(doubles);
             Assert.NotEmpty(doubles);
@@ -90,21 +186,85 @@ namespace GPS.RandomDataGenerator.Tests
         }
 
         [Theory]
+        [InlineData(10, 0)]
+        [InlineData(20, 100)]
+        public void GenerateSequencesNext(int count, int start)
+        {
+            var sequence = new int[count];
+            var sequenceGenerator = Provider.GetService<SequenceGenerator>();
+
+            for(var i = 0; i < count; ++i)
+            {
+                sequence[i] = sequenceGenerator.GetNext(start);
+            }
+
+            Assert.NotNull(sequence);
+            Assert.NotEmpty(sequence);
+            Assert.Equal(count, sequence.Length);
+            Assert.Equal(start + count - 1, sequence.Max());
+            Assert.Equal(start, sequence.Min());
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            sequence.ToList().ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
         [MemberData(nameof(DateTimeDataSource.TestData), MemberType = typeof(DateTimeDataSource))]
         public void GenerateDates(int seed, int count, DateTime min, DateTime max)
         {
-            var doubles = Provider.GetService<DateGenerator>()?
+            var dates = Provider.GetService<DateGenerator>()?
                 .Generate(seed, count, min, max)?
                 .ToList();
 
-            Assert.NotNull(doubles);
-            Assert.NotEmpty(doubles);
-            Assert.Equal(count, doubles.Count);
-            Assert.Equal(max.Ticks, Math.Max(max.Ticks, doubles.Max().Ticks));
-            Assert.Equal(min.Ticks, Math.Min(min.Ticks, doubles.Min().Ticks));
+            Assert.NotNull(dates);
+            Assert.NotEmpty(dates);
+            Assert.Equal(count, dates.Count);
+            Assert.Equal(max.Ticks, Math.Max(max.Ticks, dates.Max().Ticks));
+            Assert.Equal(min.Ticks, Math.Min(min.Ticks, dates.Min().Ticks));
             #if DEBUG
             _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
-            doubles.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            dates.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+        [Theory]
+        [MemberData(nameof(DateTimeDataSource.TestData), MemberType = typeof(DateTimeDataSource))]
+        public void GenerateDatesFromRandom(int seed, int count, DateTime min, DateTime max)
+        {
+            var random = new Random(seed);
+
+            var dates = random.Generate(count, min, max).ToList();
+
+            Assert.NotNull(dates);
+            Assert.NotEmpty(dates);
+            Assert.Equal(count, dates.Count);
+            Assert.Equal(max.Ticks, Math.Max(max.Ticks, dates.Max().Ticks));
+            Assert.Equal(min.Ticks, Math.Min(min.Ticks, dates.Min().Ticks));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            dates.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+        [Theory]
+        [MemberData(nameof(DateTimeDataSource.TestData), MemberType = typeof(DateTimeDataSource))]
+        public void GenerateDatesFromOptions(int seed, int count, DateTime min, DateTime max)
+        {
+            var options = new RangeOptions<DateTime, DateTime>(count, min, max);
+            var random = new Random(seed);
+
+            var dates = random.Generate(options).ToList();
+
+            Assert.NotNull(dates);
+            Assert.NotEmpty(dates);
+            Assert.Equal(count, dates.Count);
+            Assert.Equal(max.Ticks, Math.Max(max.Ticks, dates.Max().Ticks));
+            Assert.Equal(min.Ticks, Math.Min(min.Ticks, dates.Min().Ticks));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            dates.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
             _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
             #endif
         }
@@ -116,6 +276,48 @@ namespace GPS.RandomDataGenerator.Tests
             var decimals = Provider.GetService<DecimalGenerator>()?
                 .Generate(seed, count, min, max)?
                 .ToList();
+
+            Assert.NotNull(decimals);
+            Assert.NotEmpty(decimals);
+            Assert.Equal(count, decimals.Count);
+            Assert.Equal(max, Math.Max(max, decimals.Max()));
+            Assert.Equal(min, Math.Min(min, decimals.Min()));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            decimals.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalDataSource.TestData), MemberType = typeof(DecimalDataSource))]
+        public void GenerateDecimalsFromRandom(int seed, int count, decimal min, decimal max)
+        {
+            var random = new Random(seed);
+
+            var decimals = random.Generate(count, min, max).ToList();
+
+            Assert.NotNull(decimals);
+            Assert.NotEmpty(decimals);
+            Assert.Equal(count, decimals.Count);
+            Assert.Equal(max, Math.Max(max, decimals.Max()));
+            Assert.Equal(min, Math.Min(min, decimals.Min()));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            decimals.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
+        [MemberData(nameof(DecimalDataSource.TestData), MemberType = typeof(DecimalDataSource))]
+        public void GenerateDecimalsFromOptions(int seed, int count, decimal min, decimal max)
+        {
+            var options = new RangeOptions<decimal, decimal>(count, min, max);
+            var random = new Random(seed);
+
+            var decimals = random.Generate(options).ToList();
+
 
             Assert.NotNull(decimals);
             Assert.NotEmpty(decimals);

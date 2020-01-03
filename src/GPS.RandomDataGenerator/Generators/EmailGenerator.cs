@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace GPS.RandomDataGenerator.Generators
 {
-    public class EmailGenerator : IDataGenerator<string>
+    public class EmailGenerator : IDataGenerator<string>, IResetable
     {
         private Dictionary<int, Random> Randomizers { get; } = new Dictionary<int, Random>();
 
@@ -19,6 +19,19 @@ namespace GPS.RandomDataGenerator.Generators
 
         private IServiceProvider Provider { get; }
         private string[]         Domains  { get; }
+
+        public IEnumerable<string> Generate(Random random, int count)
+        {
+            var seed = random.GetHashCode();
+
+            if(!Randomizers.ContainsKey(seed)) Randomizers.Add(seed, random);
+
+            var names = Provider.GetService<NameGenerator>().Generate(random, count);
+
+            foreach (var name in names)
+                yield return
+                    $"{name.Replace(' ', '.').ToLowerInvariant()}@{Domains[random.Next(0, Domains.Length - 1)].ToLowerInvariant()}";
+        }
 
         public IEnumerable<string> Generate(int? seed, int count, params object[] options)
         {
@@ -34,6 +47,11 @@ namespace GPS.RandomDataGenerator.Generators
             foreach (var name in names)
                 yield return
                     $"{name.Replace(' ', '.').ToLowerInvariant()}@{Domains[random.Next(0, Domains.Length - 1)].ToLowerInvariant()}";
+        }
+ 
+        public void Reset(int seed)
+        {
+            if(Randomizers.ContainsKey(seed)) Randomizers.Remove(seed);
         }
     }
 }

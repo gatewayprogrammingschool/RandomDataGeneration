@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using GPS.RandomDataGenerator.Generators;
+using GPS.RandomDataGenerator.Extensions;
+using GPS.RandomDataGenerator.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
@@ -24,13 +27,64 @@ namespace GPS.RandomDataGenerator.Tests
 
         [Theory]
         [InlineData(0xA)]
-        [InlineData(0x64)]
-        [InlineData(0x3E8)]
+        //[InlineData(0x64)]
+        //[InlineData(0x3E8)]
         public void GenerateEmailAddresses(int count)
         {
             var addresses = Provider.GetService<EmailGenerator>()?
                 .Generate(0x0, count)?
                 .ToList();
+
+            Assert.NotNull(addresses);
+            Assert.NotEmpty(addresses);
+            Assert.DoesNotContain(addresses, s => s is null);
+            Assert.Equal(count, addresses.Count);
+
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            addresses.ForEach(address => _testOutputHelper.WriteLine(address));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
+        [InlineData(0xA)]
+        //[InlineData(0x64)]
+        //[InlineData(0x3E8)]
+        public void GenerateEmailAddressesFromRandom(int count)
+        {
+            var random = new Random(0x0);
+
+            var addresses = random.Generate(Provider, count, GenerateStrings.EmailAddress).ToList();
+
+            Assert.NotNull(addresses);
+            Assert.NotEmpty(addresses);
+            Assert.DoesNotContain(addresses, s => s is null);
+            Assert.Equal(count, addresses.Count);
+
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            addresses.ForEach(address => _testOutputHelper.WriteLine(address));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
+        [Theory]
+        [InlineData(0xA)]
+        //[InlineData(0x64)]
+        //[InlineData(0x3E8)]
+        public void GenerateEmailAddressesNext(int count)
+        {
+            var random = new Random(0x0);
+
+            var addresses = new List<string>();
+
+            for(var i = 0; i < count; ++i)
+            {
+                var address = random.Next(Provider, GenerateStrings.EmailAddress);
+
+                addresses.Add(address);
+            }
 
             Assert.NotNull(addresses);
             Assert.NotEmpty(addresses);

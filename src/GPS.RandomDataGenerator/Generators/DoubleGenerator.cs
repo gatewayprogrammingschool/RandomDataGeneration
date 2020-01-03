@@ -4,9 +4,23 @@ using GPS.RandomDataGenerator.Abstractions;
 
 namespace GPS.RandomDataGenerator.Generators
 {
-    public class DoubleGenerator : IDataGenerator<double>
+    public class DoubleGenerator : IDataGenerator<double>, IResetable
     {
         private Dictionary<int, Random> Randomizers { get; } = new Dictionary<int, Random>();
+
+        public IEnumerable<double> Generate(Random random, int count, double min, double max)
+        {
+            if (!Randomizers.ContainsKey(random.GetHashCode()))
+            {
+                Randomizers.Add(random.GetHashCode(), random);
+            }
+            else
+            {
+                Randomizers[random.GetHashCode()] = random;
+            }
+
+            return Generate(random.GetHashCode(), count, min, max);
+        }
 
         public IEnumerable<double> Generate(int? seed, int count, params object[] options)
         {
@@ -50,6 +64,11 @@ namespace GPS.RandomDataGenerator.Generators
 
                 yield return value;
             }
+        }
+ 
+        public void Reset(int seed)
+        {
+            if(Randomizers.ContainsKey(seed)) Randomizers.Remove(seed);
         }
     }
 }

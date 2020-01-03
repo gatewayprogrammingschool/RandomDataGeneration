@@ -7,7 +7,7 @@ using GPS.RandomDataGenerator.Abstractions;
 
 namespace GPS.RandomDataGenerator.Generators
 {
-    public class ColorNameGenerator : IDataGenerator<string>
+    public class ColorNameGenerator : IDataGenerator<string>, IResetable
     {
         private Dictionary<int, Random> Randomizers { get; } = new Dictionary<int, Random>();
 
@@ -18,8 +18,17 @@ namespace GPS.RandomDataGenerator.Generators
             Colors = colors.ToArray();
         }
 
-        private string[]         Colors   { get; }
+        private string[] Colors { get; }
         private IServiceProvider Provider { get; }
+
+        public IEnumerable<string> Generate(Random random, int count)
+        {
+            var seed = random.GetHashCode();
+
+            if (!Randomizers.ContainsKey(seed)) Randomizers.Add(seed, random);
+
+            return Generate(seed, count);
+        }
 
         public IEnumerable<string> Generate(int? seed, int count, params object[] options)
         {
@@ -31,6 +40,11 @@ namespace GPS.RandomDataGenerator.Generators
             }
 
             for (var i = 0; i < count; ++i) yield return Colors[random.Next(0, Colors.Length - 1)];
+        }
+
+        public void Reset(int seed)
+        {
+            if(Randomizers.ContainsKey(seed)) Randomizers.Remove(seed);
         }
     }
 }

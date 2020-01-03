@@ -7,6 +7,11 @@ namespace GPS.RandomDataGenerator.Abstractions
     {
     }
 
+    public interface IResetable
+    {
+        void Reset(int seed);
+    }
+
     public interface IDataGenerator<out TData> : IDataGenerator
     {
         IEnumerable<TData> Generate(int? seed, int count, params object[] options);

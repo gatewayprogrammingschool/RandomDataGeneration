@@ -34,10 +34,10 @@ namespace GPS.RandomDataGenerator.RecordGenerators
                 var result = Activator.CreateInstance<TRecord>();
                 foreach (var propertyInfo in data.Keys)
                 {
-                    var currentData = data[propertyInfo][i];
-
                     try
                     {
+                        var currentData = data[propertyInfo][i];
+
                         if (currentData is string || !(currentData is IEnumerable children))
                         {
                             propertyInfo.SetValue(result, currentData);
