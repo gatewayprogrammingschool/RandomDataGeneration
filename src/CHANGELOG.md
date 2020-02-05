@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.1] - Added Options and Extensions
+## [1.1.2] - Added Options and Extensions
 
 - Reusable Option objects:
   - `Options`: Basic for types that don't have a range
@@ -34,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Define properties in a map and apply to the Simple Record.
 - Dependency Injection
 
-[Unreleased]: https://github.com/gatewayprogrammingschool/RandomDataGeneration/compare/1.1.1...HEAD
-[1.1.1]: https://github.com/gatewayprogrammingschool/RandomDataGeneration/compare/1.0.3...1.1.1
+[Unreleased]: https://github.com/gatewayprogrammingschool/RandomDataGeneration/compare/1.1.2...HEAD
+[1.1.2]: https://github.com/gatewayprogrammingschool/RandomDataGeneration/compare/1.0.3...1.1.2
 [1.0.3]: https://github.com/gatewayprogrammingschool/RandomDataGeneration/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/gatewayprogrammingschool/RandomDataGeneration/releases/tag/1.0.2
