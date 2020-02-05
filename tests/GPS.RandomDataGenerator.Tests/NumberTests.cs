@@ -93,6 +93,54 @@ namespace GPS.RandomDataGenerator.Tests
             _testOutputHelper.WriteLine($"End Count: {options.Count} ----------------------------");
             #endif
         }
+        
+        [Theory]
+        [InlineData(0x0, 0xA, 0x0u, 0x19u)]
+        [InlineData(0x1, 0xA, 0x0u, 0x19u)]
+        [InlineData(0x0, 0x64, 0x0u, 0x3E8u)]
+        [InlineData(0x0, 0x2710, uint.MinValue, uint.MaxValue)]
+        public void GenerateUnsignedIntegersFromOptions(int seed, int count, uint min, uint max)
+        {
+            var options = new RangeOptions<uint, uint>(count, min, max);
+            var random = new Random(seed);
+
+            var uints = random.Generate(options).ToList();
+
+            Assert.NotNull(uints);
+            Assert.NotEmpty(uints);
+            Assert.Equal(options.Count, uints.Count);
+            Assert.True(Math.Max(options.Max, uints.Max()) == options.Max);
+            Assert.True(Math.Min(options.Min, uints.Min()) == options.Min);
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {options.Count} ----------------------------");
+            uints.ForEach(i => _testOutputHelper.WriteLine($"{i}"));
+            _testOutputHelper.WriteLine($"End Count: {options.Count} ----------------------------");
+            #endif
+        }
+        
+        [Theory]
+        [InlineData(0x0, 0xA, 0x0, 0x19)]
+        [InlineData(0x1, 0xA, 0x0, 0x19)]
+        [InlineData(0x0, 0x64, 0x0, 0xFF)]
+        [InlineData(0x0, 0x2710, byte.MinValue, byte.MaxValue)]
+        public void GenerateBytesFromOptions(int seed, int count, byte min, byte max)
+        {
+            var options = new RangeOptions<byte, byte>(count, min, max);
+            var random = new Random(seed);
+
+            var bytes = random.Generate(options).ToList();
+
+            Assert.NotNull(bytes);
+            Assert.NotEmpty(bytes);
+            Assert.Equal(options.Count, bytes.Count);
+            Assert.True(Math.Max(options.Max, bytes.Max()) == options.Max);
+            Assert.True(Math.Min(options.Min, bytes.Min()) == options.Min);
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {options.Count} ----------------------------");
+            bytes.ForEach(i => _testOutputHelper.WriteLine($"{i}"));
+            _testOutputHelper.WriteLine($"End Count: {options.Count} ----------------------------");
+            #endif
+        }
 
         [Theory]
         [InlineData(0x0, 0xA, 0x0, 0x1)]
@@ -210,6 +258,27 @@ namespace GPS.RandomDataGenerator.Tests
             #endif
         }
 
+
+        [Theory]
+        [MemberData(nameof(DateTimeOffsetDataSource.TestData), MemberType = typeof(DateTimeOffsetDataSource))]
+        public void GenerateDateOffsets(int seed, int count, DateTimeOffset min, DateTimeOffset max)
+        {
+            var dates = Provider.GetService<DateOffsetGenerator>()?
+                .Generate(seed, count, min, max)?
+                .ToList();
+
+            Assert.NotNull(dates);
+            Assert.NotEmpty(dates);
+            Assert.Equal(count, dates.Count);
+            Assert.Equal(max.Ticks, Math.Max(max.Ticks, dates.Max().Ticks));
+            Assert.Equal(min.Ticks, Math.Min(min.Ticks, dates.Min().Ticks));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            dates.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
         [Theory]
         [MemberData(nameof(DateTimeDataSource.TestData), MemberType = typeof(DateTimeDataSource))]
         public void GenerateDates(int seed, int count, DateTime min, DateTime max)
@@ -229,6 +298,27 @@ namespace GPS.RandomDataGenerator.Tests
             _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
             #endif
         }
+        
+        [Theory]
+        [MemberData(nameof(DateTimeOffsetDataSource.TestData), MemberType = typeof(DateTimeOffsetDataSource))]
+        public void GenerateDateOffsetsFromRandom(int seed, int count, DateTimeOffset min, DateTimeOffset max)
+        {
+            var random = new Random(seed);
+
+            var dates = random.Generate(count, min, max).ToList();
+
+            Assert.NotNull(dates);
+            Assert.NotEmpty(dates);
+            Assert.Equal(count, dates.Count);
+            Assert.Equal(max.Ticks, Math.Max(max.Ticks, dates.Max().Ticks));
+            Assert.Equal(min.Ticks, Math.Min(min.Ticks, dates.Min().Ticks));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            dates.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+        
         [Theory]
         [MemberData(nameof(DateTimeDataSource.TestData), MemberType = typeof(DateTimeDataSource))]
         public void GenerateDatesFromRandom(int seed, int count, DateTime min, DateTime max)
@@ -248,6 +338,28 @@ namespace GPS.RandomDataGenerator.Tests
             _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
             #endif
         }
+
+        [Theory]
+        [MemberData(nameof(DateTimeOffsetDataSource.TestData), MemberType = typeof(DateTimeOffsetDataSource))]
+        public void GenerateDateOffsetsFromOptions(int seed, int count, DateTimeOffset min, DateTimeOffset max)
+        {
+            var options = new RangeOptions<DateTimeOffset, DateTimeOffset>(count, min, max);
+            var random = new Random(seed);
+
+            var dates = random.Generate(options).ToList();
+
+            Assert.NotNull(dates);
+            Assert.NotEmpty(dates);
+            Assert.Equal(count, dates.Count);
+            Assert.Equal(max.Ticks, Math.Max(max.Ticks, dates.Max().Ticks));
+            Assert.Equal(min.Ticks, Math.Min(min.Ticks, dates.Min().Ticks));
+            #if DEBUG
+            _testOutputHelper.WriteLine($"Start Count: {count} ----------------------------");
+            dates.ForEach(value => _testOutputHelper.WriteLine($"{value}"));
+            _testOutputHelper.WriteLine($"End Count: {count} ----------------------------");
+            #endif
+        }
+
         [Theory]
         [MemberData(nameof(DateTimeDataSource.TestData), MemberType = typeof(DateTimeDataSource))]
         public void GenerateDatesFromOptions(int seed, int count, DateTime min, DateTime max)
@@ -359,4 +471,17 @@ namespace GPS.RandomDataGenerator.Tests
 
         public static IEnumerable<object[]> TestData => Data;
     }
-}
+
+    public static class DateTimeOffsetDataSource
+    {
+        private static readonly List<object[]> Data =
+            new List<object[]>
+            {
+                new object[] {0x0, 0xA, new DateTimeOffset(new DateTime(0x7D0, 0x1, 0x1)), new DateTimeOffset(new DateTime(0x7D0, 0xC, 0x1F))},
+                new object[] {0x1, 0xA, new DateTimeOffset(new DateTime(0x7D0, 0x1, 0x1)), new DateTimeOffset(new DateTime(0x7D0, 0xC, 0x1F))},
+                new object[] {0x0, 0x64, new DateTimeOffset(new DateTime(0x1, 0x1, 0x1)), new DateTimeOffset(new DateTime(0x7E3, 0xC, 0x1F))},
+                new object[] {0x0, 0x186A0, DateTimeOffset.MinValue, DateTimeOffset.MaxValue}
+            };
+
+        public static IEnumerable<object[]> TestData => Data;
+    }}

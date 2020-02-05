@@ -34,9 +34,12 @@ namespace GPS.RandomDataGenerator
 
             collection.AddSingleton<GuidGenerator, GuidGenerator>();
             collection.AddTransient<IntegerGenerator, IntegerGenerator>();
+            collection.AddTransient<ByteGenerator, ByteGenerator>();
+            collection.AddTransient<UnsignedIntegerGenerator, UnsignedIntegerGenerator>();
             collection.AddTransient<DoubleGenerator, DoubleGenerator>();
             collection.AddTransient<DecimalGenerator, DecimalGenerator>();
             collection.AddTransient<DateGenerator, DateGenerator>();
+            collection.AddTransient<DateOffsetGenerator, DateOffsetGenerator>();
             collection.AddSingleton<SequenceGenerator, SequenceGenerator>();
 
             return collection;

@@ -32,10 +32,13 @@ namespace GPS.RandomDataGenerator.Options
 
             return range switch
             {
+                (byte min, byte max) value => (IEnumerable<TResult>)new ByteGenerator().Generate(random, Count, min, max),
                 (int min, int max) value => (IEnumerable<TResult>)new IntegerGenerator().Generate(random, Count, min, max),
+                (uint min, uint max) value => (IEnumerable<TResult>)new UnsignedIntegerGenerator().Generate(random, Count, min, max),
                 (double min, double max) => (IEnumerable<TResult>)new DoubleGenerator().Generate(random, Count, min, max),
                 (decimal min, decimal max) => (IEnumerable<TResult>)new DecimalGenerator().Generate(random, Count, min, max),
                 (DateTime min, DateTime max) => (IEnumerable<TResult>)new DateGenerator().Generate(random, Count, min, max),
+                (DateTimeOffset min, DateTimeOffset max) => (IEnumerable<TResult>)new DateOffsetGenerator().Generate(random, Count, min, max),
                 _ => new List<TResult>()
             };
         }
