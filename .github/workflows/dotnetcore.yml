@@ -2,12 +2,11 @@ name: .NET
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ master ]
   release:
-    tags: 
-      - v*
+    branches: [ master ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
