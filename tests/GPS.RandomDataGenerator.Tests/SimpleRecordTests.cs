@@ -28,8 +28,10 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0x1)]
         [InlineData(1, 10)]
         [InlineData(0, 100)]
+#if FULL_TESTS
         [InlineData(0, 10000)]
         [InlineData(0, 100000)]
+#endif
         public void GenerateTestRecords(int seed, int count)
         {
             var testRecords = new SimpleRecordGenerator<TestRecord, TestRecordGeneratorMap>(Provider)

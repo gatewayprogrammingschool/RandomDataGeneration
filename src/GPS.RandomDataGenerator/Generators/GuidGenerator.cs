@@ -24,7 +24,7 @@ namespace GPS.RandomDataGenerator.Generators
             if (Randomizers.ContainsKey(seed.Value))
                 random = Randomizers[seed.Value];
             else
-                Randomizers.TryAdd(seed.Value, random);
+                Randomizers.Add(seed.Value, random);
 
             for (var i = 0; i < count; ++i)
             {

@@ -26,7 +26,7 @@ namespace GPS.RandomDataGenerator.Tests
 
         [Theory]
         [InlineData(0xA)]
-        //[InlineData(0x64)]
+        [InlineData(0x64)]
         //[InlineData(0x3E8)]
         public void GenerateNames(int count)
         {
@@ -48,7 +48,7 @@ namespace GPS.RandomDataGenerator.Tests
 
         [Theory]
         [InlineData(0xA)]
-        //[InlineData(0x64)]
+        [InlineData(0x64)]
         //[InlineData(0x3E8)]
         public void GenerateNamesFromRandom(int count)
         {
@@ -70,7 +70,7 @@ namespace GPS.RandomDataGenerator.Tests
 
         [Theory]
         [InlineData(0xA)]
-        //[InlineData(0x64)]
+        [InlineData(0x64)]
         //[InlineData(0x3E8)]
         public void GenerateNamesNext(int count)
         {

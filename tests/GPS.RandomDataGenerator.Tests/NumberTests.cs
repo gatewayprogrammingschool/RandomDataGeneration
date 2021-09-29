@@ -28,7 +28,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x19)]
         [InlineData(0x1, 0xA, 0x0, 0x19)]
         [InlineData(0x0, 0x64, -0x3E8, 0x3E8)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, int.MinValue, int.MaxValue)]
+#endif
         public void GenerateIntegers(int seed, int count, int min, int max)
         {
             var ints = Provider.GetService<IntegerGenerator>()?
@@ -51,7 +53,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x19)]
         [InlineData(0x1, 0xA, 0x0, 0x19)]
         [InlineData(0x0, 0x64, -0x3E8, 0x3E8)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, int.MinValue, int.MaxValue)]
+#endif
         public void GenerateIntegersFromRandom(int seed, int count, int min, int max)
         {
             var random = new Random(seed);
@@ -74,7 +78,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x19)]
         [InlineData(0x1, 0xA, 0x0, 0x19)]
         [InlineData(0x0, 0x64, -0x3E8, 0x3E8)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, int.MinValue, int.MaxValue)]
+#endif
         public void GenerateIntegersFromOptions(int seed, int count, int min, int max)
         {
             var options = new RangeOptions<int, int>(count, min, max);
@@ -98,7 +104,11 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0u, 0x19u)]
         [InlineData(0x1, 0xA, 0x0u, 0x19u)]
         [InlineData(0x0, 0x64, 0x0u, 0x3E8u)]
+#if FULL_TESTS
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, uint.MinValue, uint.MaxValue)]
+#endif
+#endif
         public void GenerateUnsignedIntegersFromOptions(int seed, int count, uint min, uint max)
         {
             var options = new RangeOptions<uint, uint>(count, min, max);
@@ -122,7 +132,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x19)]
         [InlineData(0x1, 0xA, 0x0, 0x19)]
         [InlineData(0x0, 0x64, 0x0, 0xFF)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, byte.MinValue, byte.MaxValue)]
+#endif
         public void GenerateBytesFromOptions(int seed, int count, byte min, byte max)
         {
             var options = new RangeOptions<byte, byte>(count, min, max);
@@ -146,7 +158,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x1)]
         [InlineData(0x1, 0xA, 0x0, 0x1)]
         [InlineData(0x0, 0x64, -1000.0, 1000.0)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, double.MinValue, double.MaxValue)]
+#endif
         public void GenerateDoubles(int seed, int count, double min, double max)
         {
             var doubles = Provider.GetService<DoubleGenerator>()?
@@ -169,7 +183,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x1)]
         [InlineData(0x1, 0xA, 0x0, 0x1)]
         [InlineData(0x0, 0x64, -1000.0, 1000.0)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, double.MinValue, double.MaxValue)]
+#endif
         public void GenerateDoublesFromRandom(int seed, int count, double min, double max)
         {
             var random = new Random(seed);
@@ -192,7 +208,9 @@ namespace GPS.RandomDataGenerator.Tests
         [InlineData(0x0, 0xA, 0x0, 0x1)]
         [InlineData(0x1, 0xA, 0x0, 0x1)]
         [InlineData(0x0, 0x64, -1000.0, 1000.0)]
+#if FULL_TESTS
         [InlineData(0x0, 0x2710, double.MinValue, double.MaxValue)]
+#endif
         public void GenerateDoublesFromOptions(int seed, int count, double min, double max)
         {
             var options = new RangeOptions<double, double>(count, min, max);
@@ -452,7 +470,9 @@ namespace GPS.RandomDataGenerator.Tests
                 new object[] {0x0, 0xA, 0m, 1m},
                 new object[] {0x1, 0xA, 0m, 1m},
                 new object[] {0x0, 0x64, -1000.0m, 1000.0m},
+#if FULL_TESTS
                 new object[] {0x0, 0x186A0, decimal.MinValue, decimal.MaxValue}
+#endif
             };
 
         public static IEnumerable<object[]> TestData => Data;
@@ -466,7 +486,9 @@ namespace GPS.RandomDataGenerator.Tests
                 new object[] {0x0, 0xA, new DateTime(0x7D0, 0x1, 0x1), new DateTime(0x7D0, 0xC, 0x1F)},
                 new object[] {0x1, 0xA, new DateTime(0x7D0, 0x1, 0x1), new DateTime(0x7D0, 0xC, 0x1F)},
                 new object[] {0x0, 0x64, new DateTime(0x1, 0x1, 0x1), new DateTime(0x7E3, 0xC, 0x1F)},
+                #if FULL_TESTS
                 new object[] {0x0, 0x186A0, DateTime.MinValue, DateTime.MaxValue}
+                #endif
             };
 
         public static IEnumerable<object[]> TestData => Data;
@@ -474,14 +496,35 @@ namespace GPS.RandomDataGenerator.Tests
 
     public static class DateTimeOffsetDataSource
     {
-        private static readonly List<object[]> Data =
-            new List<object[]>
+        private static List<object[]> _data = null;
+
+        private static IEnumerable<object[]> MakeData()
+        {
+            yield return new object[]
             {
-                new object[] {0x0, 0xA, new DateTimeOffset(new DateTime(0x7D0, 0x1, 0x1)), new DateTimeOffset(new DateTime(0x7D0, 0xC, 0x1F))},
-                new object[] {0x1, 0xA, new DateTimeOffset(new DateTime(0x7D0, 0x1, 0x1)), new DateTimeOffset(new DateTime(0x7D0, 0xC, 0x1F))},
-                new object[] {0x0, 0x64, new DateTimeOffset(new DateTime(0x1, 0x1, 0x1)), new DateTimeOffset(new DateTime(0x7E3, 0xC, 0x1F))},
-                new object[] {0x0, 0x186A0, DateTimeOffset.MinValue, DateTimeOffset.MaxValue}
+                0x0, 0xA, 
+                new DateTimeOffset(new DateTime(0x7D0, 0x1, 0x1)),
+                new DateTimeOffset(new DateTime(0x7D0, 0xC, 0x1F))
             };
 
-        public static IEnumerable<object[]> TestData => Data;
+            yield return new object[]
+            {
+                0x1, 0xA, 
+                new DateTimeOffset(new DateTime(0x7D0, 0x1, 0x1)),
+                new DateTimeOffset(new DateTime(0x7D0, 0xC, 0x1F))
+            };
+
+            yield return new object[]
+            {
+                0x0, 0x64, 
+                new DateTimeOffset(new DateTime(0x1, 0x1, 0x1)),
+                new DateTimeOffset(new DateTime(0x7E3, 0xC, 0x1F))
+            };
+
+            #if FULL_TESTS
+            yield return new object[] { 0x0, 0x186A0, DateTimeOffset.MinValue, DateTimeOffset.MaxValue };
+            #endif
+        }
+
+        public static IEnumerable<object[]> TestData => _data ??= MakeData().ToList();
     }}

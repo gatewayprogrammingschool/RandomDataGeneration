@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using GPS.RandomDataGenerator.Abstractions;
 using GPS.RandomDataGenerator.Data;
 using GPS.RandomDataGenerator.Generators;
 using Microsoft.Extensions.DependencyInjection;
@@ -62,7 +63,7 @@ namespace GPS.RandomDataGenerator
 
         private static IEnumerable<string> ReadColors()
         {
-            return Enum.GetNames(typeof(KnownColor));
+            return Enum.GetNames(typeof(KnownColors));
         }
     }
 }

@@ -26,7 +26,7 @@ namespace GPS.RandomDataGenerator.RecordGenerators
             seed ??= DateTime.Now.Millisecond;
             var map  = Activator.CreateInstance<TRecordMap>();
             var data = new Dictionary<PropertyInfo, object[]>();
-            map.Map.ToList().ForEach(pair => data.TryAdd(pair.Key,
+            map.Map.ToList().ForEach(pair => data.Add(pair.Key,
                                          GetData(pair.Value, seed.Value, count).Cast<object>().ToArray()));
 
             for (var i = 0; i < count; ++i)

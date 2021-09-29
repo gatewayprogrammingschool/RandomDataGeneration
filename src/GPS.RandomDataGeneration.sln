@@ -1,15 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31710.8
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.RandomDataGenerator.Abstractions", "GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj", "{013D20E5-7A84-4DC2-A936-A70AF8D862BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.RandomDataGenerator.Abstractions", "GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj", "{013D20E5-7A84-4DC2-A936-A70AF8D862BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.RandomDataGenerator.BaseData", "GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj", "{53D48DF5-EBC2-441C-9EF6-AB83362E5816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.RandomDataGenerator.BaseData", "GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj", "{53D48DF5-EBC2-441C-9EF6-AB83362E5816}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.RandomDataGenerator", "GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj", "{DD293A53-93BF-4E84-9FAE-48A64598A948}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.RandomDataGenerator", "GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj", "{DD293A53-93BF-4E84-9FAE-48A64598A948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.RandomDataGenerator.Tests", "..\tests\GPS.RandomDataGenerator.Tests\GPS.RandomDataGenerator.Tests.csproj", "{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.RandomDataGenerator.Tests", "..\tests\GPS.RandomDataGenerator.Tests\GPS.RandomDataGenerator.Tests.csproj", "{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4CDE505-1990-48B3-84AA-05E0F4E05272}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		..\global.json = ..\global.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +25,9 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+		ReleaseFullTests|Any CPU = ReleaseFullTests|Any CPU
+		ReleaseFullTests|x64 = ReleaseFullTests|x64
+		ReleaseFullTests|x86 = ReleaseFullTests|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -36,6 +42,12 @@ Global
 		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.Release|x64.Build.0 = Release|Any CPU
 		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.Release|x86.ActiveCfg = Release|Any CPU
 		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.Release|x86.Build.0 = Release|Any CPU
+		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.ReleaseFullTests|Any CPU.ActiveCfg = ReleaseFullTests|Any CPU
+		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.ReleaseFullTests|Any CPU.Build.0 = ReleaseFullTests|Any CPU
+		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.ReleaseFullTests|x64.ActiveCfg = ReleaseFullTests|Any CPU
+		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.ReleaseFullTests|x64.Build.0 = ReleaseFullTests|Any CPU
+		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.ReleaseFullTests|x86.ActiveCfg = ReleaseFullTests|Any CPU
+		{013D20E5-7A84-4DC2-A936-A70AF8D862BD}.ReleaseFullTests|x86.Build.0 = ReleaseFullTests|Any CPU
 		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -48,6 +60,12 @@ Global
 		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.Release|x64.Build.0 = Release|Any CPU
 		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.Release|x86.ActiveCfg = Release|Any CPU
 		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.Release|x86.Build.0 = Release|Any CPU
+		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.ReleaseFullTests|Any CPU.ActiveCfg = ReleaseFullTests|Any CPU
+		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.ReleaseFullTests|Any CPU.Build.0 = ReleaseFullTests|Any CPU
+		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.ReleaseFullTests|x64.ActiveCfg = ReleaseFullTests|Any CPU
+		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.ReleaseFullTests|x64.Build.0 = ReleaseFullTests|Any CPU
+		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.ReleaseFullTests|x86.ActiveCfg = ReleaseFullTests|Any CPU
+		{53D48DF5-EBC2-441C-9EF6-AB83362E5816}.ReleaseFullTests|x86.Build.0 = ReleaseFullTests|Any CPU
 		{DD293A53-93BF-4E84-9FAE-48A64598A948}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DD293A53-93BF-4E84-9FAE-48A64598A948}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD293A53-93BF-4E84-9FAE-48A64598A948}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -60,6 +78,12 @@ Global
 		{DD293A53-93BF-4E84-9FAE-48A64598A948}.Release|x64.Build.0 = Release|Any CPU
 		{DD293A53-93BF-4E84-9FAE-48A64598A948}.Release|x86.ActiveCfg = Release|Any CPU
 		{DD293A53-93BF-4E84-9FAE-48A64598A948}.Release|x86.Build.0 = Release|Any CPU
+		{DD293A53-93BF-4E84-9FAE-48A64598A948}.ReleaseFullTests|Any CPU.ActiveCfg = ReleaseFullTests|Any CPU
+		{DD293A53-93BF-4E84-9FAE-48A64598A948}.ReleaseFullTests|Any CPU.Build.0 = ReleaseFullTests|Any CPU
+		{DD293A53-93BF-4E84-9FAE-48A64598A948}.ReleaseFullTests|x64.ActiveCfg = ReleaseFullTests|Any CPU
+		{DD293A53-93BF-4E84-9FAE-48A64598A948}.ReleaseFullTests|x64.Build.0 = ReleaseFullTests|Any CPU
+		{DD293A53-93BF-4E84-9FAE-48A64598A948}.ReleaseFullTests|x86.ActiveCfg = ReleaseFullTests|Any CPU
+		{DD293A53-93BF-4E84-9FAE-48A64598A948}.ReleaseFullTests|x86.Build.0 = ReleaseFullTests|Any CPU
 		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -72,5 +96,17 @@ Global
 		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.Release|x64.Build.0 = Release|Any CPU
 		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.Release|x86.ActiveCfg = Release|Any CPU
 		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.Release|x86.Build.0 = Release|Any CPU
+		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.ReleaseFullTests|Any CPU.ActiveCfg = ReleaseFullTests|Any CPU
+		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.ReleaseFullTests|Any CPU.Build.0 = ReleaseFullTests|Any CPU
+		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.ReleaseFullTests|x64.ActiveCfg = ReleaseFullTests|Any CPU
+		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.ReleaseFullTests|x64.Build.0 = ReleaseFullTests|Any CPU
+		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.ReleaseFullTests|x86.ActiveCfg = ReleaseFullTests|Any CPU
+		{0A3A2DB2-8FF1-45D4-9EB1-199102A8BE85}.ReleaseFullTests|x86.Build.0 = ReleaseFullTests|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20E35ED9-A5AD-4B56-85FE-A6CF6D878176}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,137 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.1;net472;net48;net50;net60</TargetFrameworks>
+        <LangVersion>10</LangVersion>
+        <IsPackable>True</IsPackable>
+        <PackageId>GPS.RandomDataGenerator</PackageId>
+        <Title>GPS Random Data Generation</Title>
+        <Authors>The Sharp Ninja</Authors>
+        <Description>
+            <![CDATA[ 
+# Framework for generating test data.
+
+* Basic types (int, float, decimal, bool, Guid, DateTime) by range
+* Names (Given Name, Surname, Full Name)
+* Email Address
+* Simple Records (POCO Classes)
+        ]]>
+        </Description>
+        <Copyright>(C) 2019 - Gateway Programming School, Inc.</Copyright>
+        <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageTags>Data Generation</PackageTags>
+        <PackageOutputPath>..\..\packages</PackageOutputPath>
+        <IncludeSymbols>True</IncludeSymbols>
+        <SymbolPackageFormat>symbols.nupkg</SymbolPackageFormat>
+        <IncludeSource>True</IncludeSource>
+        <IncludeBuildOutput>True</IncludeBuildOutput>
+        <IncludeContentInPack>True</IncludeContentInPack>
+        <RepositoryUrl>https://github.com/gatewayprogrammingschool/RandomDataGeneration</RepositoryUrl>
+        <Configurations>Debug;Release;ReleaseFullTests</Configurations>
+    </PropertyGroup>
+    <PropertyGroup>
+        <AssemblyCompanyAttribute>Gateway Programming School, Inc.</AssemblyCompanyAttribute>
+        <UpdateAssemblyInfo>false</UpdateAssemblyInfo>
+        <UseFullSemVerForNuGet>true</UseFullSemVerForNuGet>
+        <WriteVersionInfoToBuildLog>true</WriteVersionInfoToBuildLog>
+        <UpdateVersionProperties>true</UpdateVersionProperties>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="../CHANGELOG.md" Pack="True" PackagePath="CHANGELOG.md" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+        <PackageReference Include="SIL.ReleaseTasks" Version="2.5.0">
+            <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="GitVersionTask" Version="5.5.1">
+            <PrivateAssets>All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="System.Memory" Version="4.5.4" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj" />
+    </ItemGroup>
+
+    <UsingTask TaskName="CreateReleaseNotesHtml" AssemblyFile="SIL.ReleaseTasks.dll" />
+    <UsingTask TaskName="StampChangelogFileWithVersion" AssemblyFile="SIL.ReleaseTasks.dll" />
+    <UsingTask TaskName="SetReleaseNotesProperty" AssemblyFile="SIL.ReleaseTasks.dll" />
+
+    <PropertyGroup>
+        <TextToAdd>
+            <![CDATA[
+  See full changelog at https://github.com/gatewayprogrammingschool/GPS.RandomDataGeneration/blob/master/src/CHANGELOG.md]]>
+        </TextToAdd>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.1|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netstandard2.1|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseFullTests|netstandard2.1|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net472|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net472|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseFullTests|net472|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net48|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net48|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseFullTests|net48|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net50|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net50|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseFullTests|net50|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net60|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net60|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='ReleaseFullTests|net60|AnyCPU'">
+      <DefineConstants>$(DefineConstants)TRACE;FULL_TESTS</DefineConstants>
+    </PropertyGroup>
+    <Target Name="Build">
+        <CreateReleaseNotesHtml ChangelogFile="../CHANGELOG.md" HtmlFile="../ReleaseNotes.html" />
+        <StampChangelogFileWithVersion ChangelogFile="../CHANGELOG.md" VersionNumber="$(GitVersion_InformationalVersion)" DateTimeFormat="yyyy/MM/dd" />
+        <SetReleaseNotesProperty ChangelogFile="../CHANGELOG.md" AppendToReleaseNotesProperty="$(TextToAdd)">
+            <Output TaskParameter="Value" PropertyName="ReleaseNotes" />
+        </SetReleaseNotesProperty>
+    </Target>
+</Project>
