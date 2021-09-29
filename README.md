@@ -1,6 +1,6 @@
 # Gateway Programming School - Random Data Generation
 
-![GitHub Release Date](https://img.shields.io/github/release-date/gatewayprogrammingschool/RandomDataGeneration?style=flat-square) ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/gatewayprogrammingschool/randomdatageneration/.NET%20Core?style=flat-square) ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/gatewayprogrammingschool/randomdatageneration?include_prereleases&sort=semver&style=flat-square)
+![GitHub Release Date](https://img.shields.io/github/release-date/gatewayprogrammingschool/RandomDataGeneration?style=flat-square) [![CI/CD](https://github.com/gatewayprogrammingschool/RandomDataGeneration/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/gatewayprogrammingschool/RandomDataGeneration/actions/workflows/dotnetcore.yml) ![GitHub release (latest SemVer including pre-releases)](https://img.shields.io/github/v/release/gatewayprogrammingschool/randomdatageneration?include_prereleases&sort=semver&style=flat-square)
 
 A reusable and extendable library for creating randomized data with Dotnet Core.
 
