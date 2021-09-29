@@ -1,89 +1,62 @@
-name: .NET Core
+name: .NET
 
-on: 
-  release: 
-    types: [created, edited]
-      
+on:
+  push:
+    branches: [ release/* ]
+    tags: 
+      - v*
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
 jobs:
   build:
+
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
-      with:
-        repo-token: ${{ secrets.GitHubRepositoryToken }}
-
-      # Prepare Container
-    - name: Setup .NET Core
+    - name: Checkout
+      uses: actions/checkout@v1
+      
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-
-      # Perform Build
-    - name: Build with dotnet
-      run: dotnet build src/GPS.RandomDataGeneration.sln --configuration Debug --disable-parallel
-
-      # Perform Testing
-    - name: Test with dotnet
-      run: dotnet test src/GPS.RandomDataGeneration.sln --configuration Debug --no-build
-
-  publish:
-    needs: [build]
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v1
-      with:
-        repo-token: ${{ secrets.GitHubRepositoryToken }}
-
-      # Prepare Container
-    - name: Setup .NET Core
+        dotnet-version: 5.0.x
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-
-    - name: Setup GitVersion
-      run: choco install gitversion.portable -pre -y
-
-    - name: Execute GitVersion
+        dotnet-version: 6.0.x
+        include-prerelease: true
+        
+    - name: Setup Scoop
       run: |
-            Set-Location src
-            gitversion /l console /output buildserver /updateAssemblyInfo /exec 
-
-    - name: Build & Pack Abstractions
-      run: |
-            Set-Location src
-            dotnet build GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj --configuration Release --disable-parallel
-            dotnet pack GPS.RandomDataGenerator.Abstractions\GPS.RandomDataGenerator.Abstractions.csproj --configuration Release --no-build --no-restore
-
-    - name: Build & Pack Data
-      run: |
-            Set-Location src
-            dotnet build GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj --configuration Release --disable-parallel
-            dotnet pack GPS.RandomDataGenerator.BaseData\GPS.RandomDataGenerator.BaseData.csproj --configuration Release --no-build --no-restore
-
-    - name: Build & Pack Library
-      run: |
-            Set-Location src
-            dotnet build GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj --configuration Release --disable-parallel
-            dotnet pack GPS.RandomDataGenerator\GPS.RandomDataGenerator.csproj --configuration Release --no-build --no-restore
-
-      # Publish the packages
-    - name: Publish to GitHub Repository
-      shell: powershell
-      run: |
-            $ghSource = "https://nuget.pkg.github.com/gatewayprogrammingschool/"            
-            $ngSource = "https://api.nuget.org/v3/index.json"
-
-            Get-ChildItem packages/*.nupkg | ForEach-Object -Process {
-              Write-Host "Processing" $_.FullName
-              dotnet nuget push $_.FullName --api-key ${{ secrets.GitHubRepositoryToken }} --source $ghSource --skip-duplicate
-              dotnet nuget push $_.FullName --api-key ${{ secrets.NugetRepositoryToken }} --source $ngSource --skip-duplicate
-            }
-
-      # Hold onto artifacts from the build.
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: GPS.RandomDataGenerator
-        path: packages
+        iwr -useb get.scoop.sh | iex
+        scoop install gitversion
+        GitVersion
+        
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build Debug
+      if: ${{ github.event_name != 'push.tags' }}
+      run: dotnet build -c Debug --no-restore 
+    - name: Build Release
+      if: ${{ github.event_name == 'push.tags' }}
+      run: dotnet build -c Release --no-restore 
+    - name: Tests
+      run: dotnet test --no-build
+    - name: Publish
+      if: ${{ github.event_name == 'push.tags' }}
+      run: | 
+        $outPath = (Join-Path . -Child packages)
+        dotnet pack -c Release --no-restore --include-source --no-build -o $outPath 
+        
+        gci $outPath\*.nupkg -ErrorAction Stop
+        gci $outPath\*.snupkg -ErrorAction Stop
+        
+        gci $outPath\*.nupkg | forEach-Object -process {
+          dotnet nuget push $_ -k "${{ secrets.NUGET_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
+        }
+        gci $outPath\*.snupkg | forEach-Object -process {
+          dotnet nuget push $_ -k "${{ secrets.NUGET_KEY }}" -s https://api.nuget.org/v3/index.json --skip-duplicate
+        }
+        
