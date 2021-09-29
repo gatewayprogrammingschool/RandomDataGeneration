@@ -1,4 +1,4 @@
-asname: .NET
+name: .NET
 
 on:
   push:
@@ -12,6 +12,8 @@ on:
 
 jobs:
   build:
+    env:
+      action: ${{ github.event_name }}
 
     runs-on: windows-latest
 
@@ -43,10 +45,18 @@ jobs:
       run: dotnet restore .\src\GPS.RandomDataGeneration.sln
     - name: Build Debug
       if: ${{ github.event_name != 'release.tags' }}
-      run: dotnet build .\src\GPS.RandomDataGeneration.sln  -c Debug --no-restore 
+      run: |
+        echo "action: ${{ env.action }}"
+        echo "event_name: ${{  github.event_name }}"
+        dotnet build .\src\GPS.RandomDataGeneration.sln  -c Debug --no-restore 
+        
     - name: Build Release
       if: ${{ github.event_name == 'release.tags' }}
-      run: dotnet build .\src\GPS.RandomDataGeneration.sln -c Release --no-restore 
+      run: |
+        echo "action: ${{ env.action }}"
+        echo "event_name: ${{  github.event_name }}"
+        dotnet build .\src\GPS.RandomDataGeneration.sln -c Release --no-restore 
+        
     - name: Tests
       run: dotnet test .\src\GPS.RandomDataGeneration.sln --no-build
     - name: Publish
