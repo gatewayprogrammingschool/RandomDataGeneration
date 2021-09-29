@@ -2,7 +2,7 @@ name: .NET
 
 on:
   push:
-    branches: [ release/* ]
+    branches: [ main, master ]
   release:
     tags: 
       - v*
@@ -24,14 +24,6 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.101
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
         dotnet-version: 6.0.x
         include-prerelease: true
         
@@ -43,25 +35,32 @@ jobs:
         
     - name: Restore dependencies
       run: dotnet restore .\src\GPS.RandomDataGeneration.sln
+      
     - name: Build Debug
-      if: ${{ github.event_name != 'release.tags' }}
+      if: ${{ github.event_name != 'release' }}
       run: |
         echo "action: ${{ env.action }}"
         echo "event_name: ${{  github.event_name }}"
         dotnet build .\src\GPS.RandomDataGeneration.sln  -c Debug --no-restore 
         
     - name: Build Release
-      if: ${{ github.event_name == 'release.tags' }}
+      if: ${{ github.event_name == 'release' }}
       run: |
         echo "action: ${{ env.action }}"
         echo "event_name: ${{  github.event_name }}"
         dotnet build .\src\GPS.RandomDataGeneration.sln -c Release --no-restore 
         
     - name: Tests
-      run: dotnet test .\src\GPS.RandomDataGeneration.sln --no-build
+      run: |
+        echo "action: ${{ env.action }}"
+        echo "event_name: ${{  github.event_name }}"
+        dotnet test .\src\GPS.RandomDataGeneration.sln --no-build
+      
     - name: Publish
-      if: ${{ github.event_name == 'release.tags' }}
-      run: | 
+      if: ${{ github.event_name == 'release' }}
+      run: |
+        echo "action: ${{ env.action }}"
+        echo "event_name: ${{  github.event_name }}"        
         $outPath = (Join-Path . -Child packages)
         dotnet pack .\src\GPS.RandomDataGeneration.sln -c Release --no-restore --include-source --no-build -o $outPath 
         
