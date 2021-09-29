@@ -1,4 +1,4 @@
-name: .NET
+asname: .NET
 
 on:
   push:
@@ -42,15 +42,15 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore .\src\GPS.RandomDataGeneration.sln
     - name: Build Debug
-      if: ${{ github.event_name != 'push.tags' }}
+      if: ${{ github.event_name != 'release.tags' }}
       run: dotnet build .\src\GPS.RandomDataGeneration.sln  -c Debug --no-restore 
     - name: Build Release
-      if: ${{ github.event_name == 'push.tags' }}
+      if: ${{ github.event_name == 'release.tags' }}
       run: dotnet build .\src\GPS.RandomDataGeneration.sln -c Release --no-restore 
     - name: Tests
       run: dotnet test .\src\GPS.RandomDataGeneration.sln --no-build
     - name: Publish
-      if: ${{ github.event_name == 'push.tags' }}
+      if: ${{ github.event_name == 'release.tags' }}
       run: | 
         $outPath = (Join-Path . -Child packages)
         dotnet pack .\src\GPS.RandomDataGeneration.sln -c Release --no-restore --include-source --no-build -o $outPath 
