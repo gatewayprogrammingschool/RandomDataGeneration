@@ -3,6 +3,7 @@ name: .NET
 on:
   push:
     branches: [ release/* ]
+  release:
     tags: 
       - v*
   pull_request:
